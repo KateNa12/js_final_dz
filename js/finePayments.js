@@ -34,5 +34,44 @@ alert "Номер не співпадає" або "Сума не співпад�
  */
 buttonSubmit.addEventListener('click',payFine);
 function payFine(){
+    if (!isNumber(fineNumber.value)) {
+        alert("Номер не співпадає");
+        return;
+    }
 
+    var fine = DB.find((fine) => parseInt(fine.номер) == fineNumber.value);
+    if (fine == undefined) {
+        alert("Номер не співпадає");
+        return;
+    }
+    if (fine.сума != amount.value) {
+        alert("Сума не співпадає");
+        return;
+    }
+
+    var passportReg = /^[а-яА-Я]{2}\d{6}$/;
+    if (!passportReg.test(passport.value)) {
+        alert("Не вірний паспортний номер");
+        return;
+    }
+
+    var cardReg = /^\d{16}$/;
+    if (!cardReg.test(creditCardNumber.value)) {
+        alert("Не вірна кредитна картка");
+        return;
+    }
+
+    var cvvReg = /^\d{3}$/;
+    if (!cvvReg.test(cvv.value)) {
+        alert("Не вірний cvv");
+        return;
+    }
+
+    var index = DB.indexOf(fine);
+    DB.splice(index, 1);
+    alert("Штраф сплачено");
+}
+
+function isNumber(number) {
+    return parseInt(number) == number;
 }
